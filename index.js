@@ -18,8 +18,15 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/protected', ensuretoken, (req, res) => {
-  res.json({
-    text: 'Protected',
+  jwt.verify(req.token, 'my_secret_key', (err, data) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      res.json({
+        text: 'protected',
+        data,
+      });
+    }
   });
 });
 
